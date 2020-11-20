@@ -26,7 +26,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::sockReady()
 {
     data = socket->readAll();
-    ui->textEdit->setText(data);
+
 }
 
 void MainWindow::sockDisc()
