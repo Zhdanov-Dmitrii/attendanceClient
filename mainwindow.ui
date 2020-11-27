@@ -56,7 +56,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit"/>
+             <widget class="QLineEdit" name="lecture_lineEdit"/>
             </item>
            </layout>
           </item>
@@ -70,7 +70,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_2"/>
+             <widget class="QLineEdit" name="teacher_lineEdit"/>
             </item>
            </layout>
           </item>
@@ -84,7 +84,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_3"/>
+             <widget class="QLineEdit" name="team_lineEdit"/>
             </item>
            </layout>
           </item>
@@ -106,16 +106,16 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="search_lecture">
             <property name="text">
-             <string>PushButton</string>
+             <string>Поиск</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_2">
+         <widget class="QTableWidget" name="lecture_tableWidget">
           <row>
            <property name="text">
             <string>1</string>
@@ -218,7 +218,7 @@
      <x>0</x>
      <y>0</y>
      <width>1321</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
