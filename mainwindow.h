@@ -9,6 +9,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QProcess>
 
 
 QT_BEGIN_NAMESPACE
@@ -30,6 +31,8 @@ public slots:
 
 private slots:
     void on_search_lecture_clicked();
+
+    void on_pushButton_3_clicked();
 
 private:
     QTcpSocket *socket;

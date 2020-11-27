@@ -36,12 +36,13 @@ void MainWindow::sockReady()
         //{"type":"result select lecture", "results":[...]}
         if(doc.object().value("type").toString() == "result select lecture")
         {
-            QJsonArray docArr = doc.object().value("result").toArray();
+            QJsonArray docArr = doc.object().value("results").toArray();
 
             ui->lecture_tableWidget->setRowCount(docArr.count());
             ui->lecture_tableWidget->clearContents();
             for(int i = 0; i < docArr.count();i++)
             {
+                qDebug() << docArr[i].toObject().value("lecture").toString();
                 ui->lecture_tableWidget->setItem(i,0, new QTableWidgetItem(docArr[i].toObject().value("lecture").toString()));
                 ui->lecture_tableWidget->setItem(i,1, new QTableWidgetItem(docArr[i].toObject().value("teacher").toString()));
                 ui->lecture_tableWidget->setItem(i,2, new QTableWidgetItem(docArr[i].toObject().value("team").toString()));
@@ -67,4 +68,12 @@ void MainWindow::on_search_lecture_clicked()
     QString select = "{\"type\":\"select lecture\", \"lecture\":\""+ lecture +"\", \"teacher\":\""+ teacher +"\", \"team\":\""+team+"\"}";
 
     socket->write(select.toUtf8());
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QProcess *process = new QProcess(this);
+    QString file = "C:\\Users\\Дмитрий\\AppData\\Local\\GitHubDesktop\\GitHubDesktop.exe";
+    process->start(file);
+
 }
