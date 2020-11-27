@@ -26,6 +26,34 @@ void MainWindow::sockDisc()
 
 void MainWindow::sockReady()
 {
+    data = socket->readAll();
+    qDebug() << data;
+    QJsonParseError docError;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &docError);
+
+    if(docError.errorString() != QJsonParseError::NoError)
+    {
+        //{"type":"result select lecture", "results":[...]}
+        if(doc.object().value("type").toString() == "result select lecture")
+        {
+            QJsonArray docArr = doc.object().value("result").toArray();
+
+            ui->lecture_tableWidget->setRowCount(docArr.count());
+            ui->lecture_tableWidget->clearContents();
+            for(int i = 0; i < docArr.count();i++)
+            {
+                ui->lecture_tableWidget->setItem(i,0, new QTableWidgetItem(docArr[i].toObject().value("lecture").toString()));
+                ui->lecture_tableWidget->setItem(i,1, new QTableWidgetItem(docArr[i].toObject().value("teacher").toString()));
+                ui->lecture_tableWidget->setItem(i,2, new QTableWidgetItem(docArr[i].toObject().value("team").toString()));
+            }
+            ui->lecture_tableWidget->resizeColumnsToContents();
+            QApplication::beep();
+        }
+    }
+    else
+    {
+        qDebug() << docError.errorString();
+    }
 
 }
 

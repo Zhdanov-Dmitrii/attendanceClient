@@ -5,6 +5,10 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
 
 
 QT_BEGIN_NAMESPACE
