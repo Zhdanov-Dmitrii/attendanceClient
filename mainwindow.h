@@ -34,9 +34,13 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_lecture_tableWidget_cellDoubleClicked(int row, int column);
+
 private:
     QTcpSocket *socket;
     QByteArray data;
+    QJsonDocument doc;
+    QJsonParseError docError;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

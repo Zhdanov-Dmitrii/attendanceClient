@@ -28,10 +28,9 @@ void MainWindow::sockReady()
 {
     data = socket->readAll();
     qDebug() << data;
-    QJsonParseError docError;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &docError);
+    doc = QJsonDocument::fromJson(data, &docError);
 
-    if(docError.errorString() != QJsonParseError::NoError)
+    if(docError.error == QJsonParseError::NoError)
     {
         //{"type":"result select lecture", "results":[...]}
         if(doc.object().value("type").toString() == "result select lecture")
@@ -49,6 +48,44 @@ void MainWindow::sockReady()
             }
             ui->lecture_tableWidget->resizeColumnsToContents();
             QApplication::beep();
+        }
+        else if(doc.object().value("type").toString() == "result select attendance") //{\"type\":\"result select attendance\", \"results\":[...]}
+        {
+            QJsonArray docArr = doc.object().value("results").toArray();
+
+            QString t = docArr[0].toObject().value("date").toString();
+
+            QStringList name;
+            for(int i = 0; t  == docArr[i].toObject().value("date").toString(); i++)
+                name << docArr[i].toObject().value("fio").toString();
+
+            QStringList date;
+            for(int i = 0; i < docArr.count(); i += name.size())
+                date << docArr[i].toObject().value("date").toString();
+
+
+            ui->tableWidget->setRowCount(name.size());
+            ui->tableWidget->setColumnCount(date.size());
+            ui->tableWidget->setHorizontalHeaderLabels(date);
+            ui->tableWidget->setVerticalHeaderLabels(name);
+
+            int k = 0;
+            for(int i = 0; i < name.size();i++)
+            {
+                for(int j = 0; j < date.size();j++)
+                {
+                    QTableWidgetItem *item = new QTableWidgetItem(docArr[k].toObject().value("+-").toString());
+                    if(docArr[k].toObject().value("+-").toString() == "+")
+                        item->setBackgroundColor(QColor(0,255,0));
+                    else
+                        item->setBackgroundColor(QColor(255,0,0));
+
+                    ui->tableWidget->setItem(i,j, item);
+                    k++;
+                }
+            }
+
+
         }
     }
     else
@@ -77,3 +114,16 @@ void MainWindow::on_pushButton_3_clicked()
     process->start(file);
 
 }
+
+void MainWindow::on_lecture_tableWidget_cellDoubleClicked(int row, int column)
+{
+    QString lessonName = ui->lecture_tableWidget->item(row,0)->text();
+    QString lessonLecturer = ui->lecture_tableWidget->item(row,1)->text();
+    QString groupName = ui->lecture_tableWidget->item(row,2)->text();
+
+    //{"type":"select attendance", "lessonName":"", "lessonLecturer":"", "groupName":""}
+    QString select ="{\"type\":\"select attendance\", \"lessonName\":\"" + lessonName + "\", \"lessonLecturer\":\""+lessonLecturer+"\", \"groupName\":\""+groupName+"\"}";
+    socket->write(select.toUtf8());
+}
+
+
