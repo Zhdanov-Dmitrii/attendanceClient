@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(socket, SIGNAL(readyRead()), this, SLOT(sockReady()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(sockDisc()));
     socket->connectToHost("127.0.0.1", 1234);
+
+    ui->lecture_tableWidget->sortByColumn(0,Qt::AscendingOrder);
 }
 
 MainWindow::~MainWindow()
@@ -53,11 +55,11 @@ void MainWindow::sockReady()
         {
             QJsonArray docArr = doc.object().value("results").toArray();
 
-            QString t = docArr[0].toObject().value("date").toString();
-
             QStringList name;
-            for(int i = 0; t  == docArr[i].toObject().value("date").toString(); i++)
+            name << docArr[0].toObject().value("fio").toString();;
+            for(int i = 1; docArr[i].toObject().value("fio").toString() != name[0]; i++)
                 name << docArr[i].toObject().value("fio").toString();
+
 
             QStringList date;
             for(int i = 0; i < docArr.count(); i += name.size())
@@ -70,9 +72,9 @@ void MainWindow::sockReady()
             ui->tableWidget->setVerticalHeaderLabels(name);
 
             int k = 0;
-            for(int i = 0; i < name.size();i++)
+            for(int i = 0; i < date.size();i++)
             {
-                for(int j = 0; j < date.size();j++)
+                for(int j = 0; j < name.size();j++)
                 {
                     QTableWidgetItem *item = new QTableWidgetItem(docArr[k].toObject().value("+-").toString());
                     if(docArr[k].toObject().value("+-").toString() == "+")
@@ -80,10 +82,11 @@ void MainWindow::sockReady()
                     else
                         item->setBackgroundColor(QColor(255,0,0));
 
-                    ui->tableWidget->setItem(i,j, item);
+                    ui->tableWidget->setItem(j, i, item);
                     k++;
                 }
             }
+            ui->tableWidget->resizeColumnsToContents();
 
 
         }
@@ -121,9 +124,50 @@ void MainWindow::on_lecture_tableWidget_cellDoubleClicked(int row, int column)
     QString lessonLecturer = ui->lecture_tableWidget->item(row,1)->text();
     QString groupName = ui->lecture_tableWidget->item(row,2)->text();
 
+    ui->infoLesson->setText(lessonName+" ");
+    ui->infoLecturer->setText(lessonLecturer+" ");
+    ui->infoGroup->setText(groupName);
+
     //{"type":"select attendance", "lessonName":"", "lessonLecturer":"", "groupName":""}
     QString select ="{\"type\":\"select attendance\", \"lessonName\":\"" + lessonName + "\", \"lessonLecturer\":\""+lessonLecturer+"\", \"groupName\":\""+groupName+"\"}";
     socket->write(select.toUtf8());
 }
 
 
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    ui->lecture_tableWidget->sortByColumn(index,Qt::AscendingOrder);
+}
+
+void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+{
+    QString date, time;
+
+
+    QStringList list;
+    list << ui->infoLesson->text();
+    list << ui->tableWidget->horizontalHeaderItem(column)->text().split(' ');
+
+    list[2].remove('(');
+    list[2].remove(')');
+
+    list << ui->infoLecturer->text();
+    list << "тут может быть ваша реклама";
+    list << ui->infoGroup->text();
+
+
+    int count = 0;
+    for(int i = 0; i < ui->tableWidget->rowCount(); i++)
+        if(ui->tableWidget->item(i, column)->text() == "+")
+            count++;
+
+    list << QString::number(count);
+    list << QString::number(ui->tableWidget->rowCount()-count);
+
+
+
+
+    infoLesson *info = new infoLesson(this, list);
+    info->show();
+}

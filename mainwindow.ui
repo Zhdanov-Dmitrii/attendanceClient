@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1103</width>
-    <height>643</height>
+    <height>703</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -106,6 +106,35 @@
            </spacer>
           </item>
           <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Сортировать по </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox">
+            <property name="contextMenuPolicy">
+             <enum>Qt::DefaultContextMenu</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>Предмету</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Преподователю</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Группе</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="search_lecture">
             <property name="text">
              <string>Поиск</string>
@@ -164,9 +193,82 @@
            </layout>
           </item>
           <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Группа</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="infoLesson">
+            <property name="text">
+             <string>Предмет</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="infoLecturer">
+            <property name="text">
+             <string>Преподаватель</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="infoGroup">
+            <property name="text">
+             <string>Группы</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Сортировать по </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_2">
+            <item>
+             <property name="text">
+              <string>Студенту</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Группе</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
-             <string>PushButton</string>
+             <string>Поиск</string>
             </property>
            </widget>
           </item>
@@ -218,7 +320,7 @@
      <x>0</x>
      <y>0</y>
      <width>1103</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

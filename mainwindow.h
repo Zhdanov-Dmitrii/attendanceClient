@@ -11,6 +11,8 @@
 #include <QJsonArray>
 #include <QProcess>
 
+#include "infolesson.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,6 +37,10 @@ private slots:
     void on_pushButton_3_clicked();
 
     void on_lecture_tableWidget_cellDoubleClicked(int row, int column);
+
+    void on_comboBox_currentIndexChanged(int index);
+
+    void on_tableWidget_cellDoubleClicked(int row, int column);
 
 private:
     QTcpSocket *socket;
