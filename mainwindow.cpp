@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     socket->connectToHost("127.0.0.1", 1234);
 
     ui->lecture_tableWidget->sortByColumn(0,Qt::AscendingOrder);
+
+    changeTable = true;
 }
 
 MainWindow::~MainWindow()
@@ -72,6 +74,7 @@ void MainWindow::sockReady()
             ui->tableWidget->setVerticalHeaderLabels(name);
 
             int k = 0;
+            changeTable = false;
             for(int i = 0; i < date.size();i++)
             {
                 for(int j = 0; j < name.size();j++)
@@ -87,7 +90,7 @@ void MainWindow::sockReady()
                 }
             }
             ui->tableWidget->resizeColumnsToContents();
-
+            changeTable = true;
 
         }
     }
@@ -112,10 +115,18 @@ void MainWindow::on_search_lecture_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    QProcess *process = new QProcess(this);
-    QString file = "C:\\Users\\Дмитрий\\AppData\\Local\\GitHubDesktop\\GitHubDesktop.exe";
-    process->start(file);
+    createFoto *cf = new createFoto(this);
+    cf->show();
 
+
+
+
+
+    //QString pyCommand("python D:\\project\\attendance\\main.py \n"); //try with out " \n" also...
+
+    //QProcess *qprocess = new QProcess(this);
+    //qprocess->start("cmd");
+    //qprocess->write(pyCommand.toLatin1().data());
 }
 
 void MainWindow::on_lecture_tableWidget_cellDoubleClicked(int row, int column)
@@ -132,8 +143,6 @@ void MainWindow::on_lecture_tableWidget_cellDoubleClicked(int row, int column)
     QString select ="{\"type\":\"select attendance\", \"lessonName\":\"" + lessonName + "\", \"lessonLecturer\":\""+lessonLecturer+"\", \"groupName\":\""+groupName+"\"}";
     socket->write(select.toUtf8());
 }
-
-
 
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
@@ -170,4 +179,36 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 
     infoLesson *info = new infoLesson(this, list);
     info->show();
+}
+
+void MainWindow::on_tableWidget_cellChanged(int row, int column)
+{
+    if(!changeTable)
+        return;
+
+    QString fio, lessonName, lessonTime, date;
+    fio = ui->tableWidget->verticalHeaderItem(row)->text();
+    lessonName = fio;
+    lessonName.remove(0, lessonName.indexOf('(')+1);
+    lessonName.remove(')');
+    fio.remove(fio.lastIndexOf(' '), fio.size()-fio.lastIndexOf(' '));
+
+    date = ui->tableWidget->horizontalHeaderItem(column)->text();
+    lessonTime = date;
+    lessonTime.remove(0, lessonTime.indexOf('(')+1);
+    lessonTime.remove(')');
+    date.remove(date.lastIndexOf(' '), date.size()-date.lastIndexOf(' '));
+
+
+    QString select = "{\"type\":\"update student status\", ";
+    select += "\"fio\":\""+fio+"\", \"lessonName\":\""+lessonName+"\", \"lessonTime\":\""+lessonTime+"\", \"date\":\""+date+"\", \"status\":\""+
+            ui->tableWidget->item(row, column)->text()+"\"}";
+    socket->write(select.toUtf8());
+
+    changeTable = false;
+    if(ui->tableWidget->item(row, column)->text() == "-")
+        ui->tableWidget->item(row, column)->setBackgroundColor(QColor(255,0,0));
+    else
+        ui->tableWidget->item(row, column)->setBackgroundColor(QColor(0,255,0));
+    changeTable = true;
 }

@@ -1,4 +1,4 @@
-QT       += core gui network
+QT       += core gui network multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,17 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    createfoto.cpp \
     infolesson.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    createfoto.h \
     infolesson.h \
     mainwindow.h
 
 FORMS += \
+    createfoto.ui \
     infolesson.ui \
     mainwindow.ui
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

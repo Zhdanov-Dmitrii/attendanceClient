@@ -12,6 +12,7 @@
 #include <QProcess>
 
 #include "infolesson.h"
+#include "createfoto.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -42,7 +43,10 @@ private slots:
 
     void on_tableWidget_cellDoubleClicked(int row, int column);
 
+    void on_tableWidget_cellChanged(int row, int column);
+
 private:
+    bool changeTable;
     QTcpSocket *socket;
     QByteArray data;
     QJsonDocument doc;
