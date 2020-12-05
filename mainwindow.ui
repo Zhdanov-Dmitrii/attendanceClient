@@ -188,7 +188,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_4"/>
+             <widget class="QLineEdit" name="lineEditFio"/>
             </item>
            </layout>
           </item>
@@ -202,7 +202,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit"/>
+             <widget class="QLineEdit" name="lineEditGroupStudent"/>
             </item>
            </layout>
           </item>
@@ -266,7 +266,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="searchStudent">
             <property name="text">
              <string>Поиск</string>
             </property>
@@ -320,7 +320,7 @@
      <x>0</x>
      <y>0</y>
      <width>1103</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

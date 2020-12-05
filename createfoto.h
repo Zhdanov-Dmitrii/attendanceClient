@@ -5,6 +5,7 @@
 #include <QCamera>
 #include <QCameraViewfinder>
 #include <QCameraInfo>
+#include <QCameraImageCapture>
 
 
 namespace Ui {
@@ -19,9 +20,16 @@ public:
     explicit createFoto(QWidget *parent = nullptr);
     ~createFoto();
 
+signals:
+    void foto();
+
+private slots:
+    void on_pushButton_clicked();
+
 private:
     QCamera *camera;
     QCameraViewfinder *cameraView;
+    QCameraImageCapture *cup;
     Ui::createFoto *ui;
 };
 

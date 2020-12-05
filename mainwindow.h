@@ -10,6 +10,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QProcess>
+#include <QFile>
 
 #include "infolesson.h"
 #include "createfoto.h"
@@ -44,6 +45,10 @@ private slots:
     void on_tableWidget_cellDoubleClicked(int row, int column);
 
     void on_tableWidget_cellChanged(int row, int column);
+
+    void queryFoto();
+
+    void on_searchStudent_clicked();
 
 private:
     bool changeTable;

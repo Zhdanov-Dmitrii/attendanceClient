@@ -118,6 +118,7 @@ void MainWindow::on_pushButton_3_clicked()
     createFoto *cf = new createFoto(this);
     cf->show();
 
+    connect(cf,SIGNAL(foto()), this, SLOT(queryFoto()));
 
 
 
@@ -135,8 +136,8 @@ void MainWindow::on_lecture_tableWidget_cellDoubleClicked(int row, int column)
     QString lessonLecturer = ui->lecture_tableWidget->item(row,1)->text();
     QString groupName = ui->lecture_tableWidget->item(row,2)->text();
 
-    ui->infoLesson->setText(lessonName+" ");
-    ui->infoLecturer->setText(lessonLecturer+" ");
+    ui->infoLesson->setText(lessonName);
+    ui->infoLecturer->setText(lessonLecturer);
     ui->infoGroup->setText(groupName);
 
     //{"type":"select attendance", "lessonName":"", "lessonLecturer":"", "groupName":""}
@@ -188,10 +189,7 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
 
     QString fio, lessonName, lessonTime, date;
     fio = ui->tableWidget->verticalHeaderItem(row)->text();
-    lessonName = fio;
-    lessonName.remove(0, lessonName.indexOf('(')+1);
-    lessonName.remove(')');
-    fio.remove(fio.lastIndexOf(' '), fio.size()-fio.lastIndexOf(' '));
+    lessonName = ui->infoLesson->text();
 
     date = ui->tableWidget->horizontalHeaderItem(column)->text();
     lessonTime = date;
@@ -199,6 +197,7 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
     lessonTime.remove(')');
     date.remove(date.lastIndexOf(' '), date.size()-date.lastIndexOf(' '));
 
+    qDebug() << fio << lessonName << lessonTime << date;
 
     QString select = "{\"type\":\"update student status\", ";
     select += "\"fio\":\""+fio+"\", \"lessonName\":\""+lessonName+"\", \"lessonTime\":\""+lessonTime+"\", \"date\":\""+date+"\", \"status\":\""+
@@ -211,4 +210,40 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
     else
         ui->tableWidget->item(row, column)->setBackgroundColor(QColor(0,255,0));
     changeTable = true;
+}
+
+void MainWindow::queryFoto()
+{
+    QFile foto(QCoreApplication::applicationDirPath()+"/foto.jpg");
+    if(!foto.open(QFile::ReadOnly))
+        return;
+
+    QByteArray query = "{\"type\":\"face recognition\", \"data\":\"";
+    query += foto.readAll();
+    query += "\"}";
+    socket->write(query);
+    foto.close();
+}
+
+void MainWindow::on_searchStudent_clicked()
+{
+    QString fio = ui->lineEditFio->text();
+    QString group = ui->lineEditGroupStudent->text();
+
+    for(int i = 0; i < ui->tableWidget->rowCount(); i++)
+    {
+        ui->tableWidget->showRow(i);
+
+        QString tFio = ui->tableWidget->verticalHeaderItem(i)->text();
+        QString tGroup = tFio;
+
+        tGroup.remove(0,tFio.indexOf('(')+1);
+        tGroup.remove(')');
+
+        tFio.remove(tFio.lastIndexOf(' '), tFio.size()-tFio.lastIndexOf(' '));
+
+        if(!(tFio.contains(fio,Qt::CaseInsensitive) && tGroup.contains(group,Qt::CaseInsensitive)))
+            ui->tableWidget->hideRow(i);
+
+    }
 }

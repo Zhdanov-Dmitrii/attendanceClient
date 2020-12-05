@@ -16,12 +16,6 @@ infoLesson::infoLesson(QWidget *parent, QStringList list) :
     ui->attendance->setText(list[6]);
     ui->noAttendance->setText(list[7]);
 
-
-
-
-
-
-
 }
 
 infoLesson::~infoLesson()
