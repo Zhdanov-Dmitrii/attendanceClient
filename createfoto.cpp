@@ -30,8 +30,31 @@ void createFoto::on_pushButton_clicked()
 {
     camera->searchAndLock();
     cup->capture(QCoreApplication::applicationDirPath()+"/foto.jpg");
-    camera->unlock();
-    emit foto()ж
+
+    emit foto();
 
     qDebug() << QCoreApplication::applicationDirPath()+"/foto.jpg";
+}
+
+void createFoto::writeTable(QStringList data)
+{
+    ui->table->setRowCount(data.size()/3);
+    ui->table->setColumnCount(3);
+    qDebug() << ui->table->rowCount() << ui->table->columnCount();
+    int k = 0;
+    for(int i = 0; i < data.size()/3; ++i)
+    {
+        QColor clr = QColor(250,0,0);
+        if(data[i+2]=="+")
+            clr = QColor(0,255,0);
+
+        for(int j = 0; j < 3; j++)
+        {
+            qDebug() << data[k];
+            QTableWidgetItem *item = new QTableWidgetItem(data[k]);
+            item->setBackgroundColor(clr);
+            ui->table->setItem(i, j, item);
+            k++;
+        }
+    }
 }

@@ -19,12 +19,15 @@ class createFoto : public QDialog
 public:
     explicit createFoto(QWidget *parent = nullptr);
     ~createFoto();
-
+    void writeTable(QStringList  data);
 signals:
     void foto();
 
 private slots:
     void on_pushButton_clicked();
+
+
+
 
 private:
     QCamera *camera;

@@ -50,8 +50,12 @@ private slots:
 
     void on_searchStudent_clicked();
 
+signals:
+    void listStudent(QStringList &data);
+
 private:
     bool changeTable;
+    createFoto *cf;
     QTcpSocket *socket;
     QByteArray data;
     QJsonDocument doc;

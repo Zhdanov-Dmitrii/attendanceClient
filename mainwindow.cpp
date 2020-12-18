@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->lecture_tableWidget->sortByColumn(0,Qt::AscendingOrder);
 
+
     changeTable = true;
 }
 
@@ -93,9 +94,23 @@ void MainWindow::sockReady()
             changeTable = true;
 
         }
+        else if(doc.object().value("type").toString() == "result face recognition")
+        {
+            QJsonArray docArr = doc.object().value("results").toArray();
+            QStringList data;
+            for(int i = 0; i < docArr.count();i++)
+            {
+                data << docArr[i].toObject().value("name").toString();
+                data << docArr[i].toObject().value("group").toString();
+                data << docArr[i].toObject().value("status").toString();
+            }
+            cf->writeTable(data);
+        }
     }
     else
     {
+        QString t = data;
+        QMessageBox::information(this, "temp", t);
         qDebug() << docError.errorString();
     }
 
@@ -115,7 +130,7 @@ void MainWindow::on_search_lecture_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    createFoto *cf = new createFoto(this);
+    cf = new createFoto(this);
     cf->show();
 
     connect(cf,SIGNAL(foto()), this, SLOT(queryFoto()));
@@ -217,10 +232,15 @@ void MainWindow::queryFoto()
     QFile foto(QCoreApplication::applicationDirPath()+"/foto.jpg");
     if(!foto.open(QFile::ReadOnly))
         return;
-
-    QByteArray query = "{\"type\":\"face recognition\", \"data\":\"";
-    query += foto.readAll();
+    //название пары, время, день недели, аудитория
+    QByteArray query = "{\"type\":\"face recognition\", \"lesson name\":\"";
+    query += ui->currentLesson->text();
+    query += "\",\"time\":\"";
+    query += ui->currentTime->text();
+    query += "\", \"audit\":\"";
+    query += ui->currentAudit->text();
     query += "\"}";
+    query += foto.readAll();
     socket->write(query);
     foto.close();
 }
