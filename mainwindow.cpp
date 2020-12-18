@@ -60,7 +60,7 @@ void MainWindow::sockReady()
 
             QStringList name;
             name << docArr[0].toObject().value("fio").toString();;
-            for(int i = 1; docArr[i].toObject().value("fio").toString() != name[0]; i++)
+            for(int i = 1; i < docArr.count() && docArr[i].toObject().value("fio").toString() != name[0]; i++)
                 name << docArr[i].toObject().value("fio").toString();
 
 

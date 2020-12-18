@@ -50,7 +50,7 @@ void createFoto::writeTable(QStringList data)
     for(int i = 0; i < data.size()/3; ++i)
     {
         QColor clr = QColor(250,0,0);
-        if(data[i+2]=="+")
+        if(data[k+2]=="+")
             clr = QColor(0,255,0);
 
         for(int j = 0; j < 3; j++)
