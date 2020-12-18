@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Отметка присутствующих</string>
   </property>
   <property name="windowIcon">
    <iconset resource="logo.qrc">
@@ -23,7 +23,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>PushButton</string>
+        <string>Сделать фото</string>
        </property>
       </widget>
      </item>

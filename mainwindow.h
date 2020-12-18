@@ -46,7 +46,7 @@ private slots:
 
     void on_tableWidget_cellChanged(int row, int column);
 
-    void queryFoto();
+    void queryFoto(bool status);
 
     void on_searchStudent_clicked();
 

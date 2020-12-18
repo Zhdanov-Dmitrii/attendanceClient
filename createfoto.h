@@ -21,7 +21,7 @@ public:
     ~createFoto();
     void writeTable(QStringList  data);
 signals:
-    void foto();
+    void foto(bool flag);
 
 private slots:
     void on_pushButton_clicked();

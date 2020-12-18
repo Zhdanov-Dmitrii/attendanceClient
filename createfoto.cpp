@@ -31,7 +31,12 @@ void createFoto::on_pushButton_clicked()
     camera->searchAndLock();
     cup->capture(QCoreApplication::applicationDirPath()+"/foto.jpg");
 
-    emit foto();
+    if(ui->pushButton->text() == "Сделать фото")
+        emit foto(true);
+    else
+        emit foto(false);
+
+    ui->pushButton->setText("Переснять");
 
     qDebug() << QCoreApplication::applicationDirPath()+"/foto.jpg";
 }

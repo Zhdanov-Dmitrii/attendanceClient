@@ -133,7 +133,7 @@ void MainWindow::on_pushButton_3_clicked()
     cf = new createFoto(this);
     cf->show();
 
-    connect(cf,SIGNAL(foto()), this, SLOT(queryFoto()));
+    connect(cf,SIGNAL(foto(bool)), this, SLOT(queryFoto(bool)));
 
 
 
@@ -227,7 +227,7 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
     changeTable = true;
 }
 
-void MainWindow::queryFoto()
+void MainWindow::queryFoto(bool status)
 {
     QFile foto(QCoreApplication::applicationDirPath()+"/foto.jpg");
     if(!foto.open(QFile::ReadOnly))
@@ -239,6 +239,11 @@ void MainWindow::queryFoto()
     query += ui->currentTime->text();
     query += "\", \"audit\":\"";
     query += ui->currentAudit->text();
+    query += "\", \"status\":\"";
+    if(status)
+        query += "insert";
+    else
+        query += "update";
     query += "\"}";
     query += foto.readAll();
     socket->write(query);
