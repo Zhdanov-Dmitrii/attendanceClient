@@ -56,6 +56,7 @@ signals:
 private:
     bool changeTable;
     createFoto *cf;
+    infoLesson *info;
     QTcpSocket *socket;
     QByteArray data;
     QJsonDocument doc;

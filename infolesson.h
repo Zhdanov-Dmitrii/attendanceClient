@@ -16,6 +16,8 @@ public:
     explicit infoLesson(QWidget *parent = nullptr, QStringList list = QStringList());
     ~infoLesson();
 
+    void setFoto(QString &audit, QString &foto);
+
 private:
     Ui::infoLesson *ui;
 };

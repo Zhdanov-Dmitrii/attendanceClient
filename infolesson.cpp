@@ -1,5 +1,7 @@
 #include "infolesson.h"
 #include "ui_infolesson.h"
+#include <QPixmap>
+#include <QFile>
 
 infoLesson::infoLesson(QWidget *parent, QStringList list) :
     QDialog(parent),
@@ -23,4 +25,17 @@ infoLesson::infoLesson(QWidget *parent, QStringList list) :
 infoLesson::~infoLesson()
 {
     delete ui;
+}
+
+void infoLesson::setFoto(QString &audit, QString &foto)
+{
+    ui->audit->setText(audit);
+    QFile f(foto);
+    f.open(QFile::ReadOnly);
+    QByteArray data = f.readAll();
+    f.close();
+    QPixmap img;
+    img.loadFromData(data);
+
+    ui->foto->setPixmap(img);
 }

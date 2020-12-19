@@ -106,6 +106,13 @@ void MainWindow::sockReady()
             }
             cf->writeTable(data);
         }
+        else if(doc.object().value("type").toString() == "result select lesson info")
+        {
+            QString audit = doc.object().value("audit").toString();
+            QString foto = doc.object().value("foto").toString();
+            qDebug() << foto;
+            info->setFoto(audit, foto);
+        }
     }
     else
     {
@@ -167,8 +174,23 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 
 void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 {
-    QString date, time;
+    //{"type":"select lesson info","date":"","lessonName":"",,"lecturer":"", "time":""}
+    QString fio, lessonName, lessonTime, date, lecturer;
+    lecturer = ui->infoLecturer->text();
+    fio = ui->tableWidget->verticalHeaderItem(row)->text();
+    lessonName = ui->infoLesson->text();
+    date = ui->tableWidget->horizontalHeaderItem(column)->text();
+    lessonTime = date;
+    lessonTime.remove(0, lessonTime.indexOf('(')+1);
+    lessonTime.remove(')');
+    date.remove(date.lastIndexOf(' '), date.size()-date.lastIndexOf(' '));
 
+    QString select = "{\"type\":\"select lesson info\",\"date\":\"" +
+                        date +"\",\"lessonName\":\""+
+                        lessonName +"\",\"lecturer\":\""
+                       +lecturer+"\", \"time\":\""+
+                        lessonTime+"\"}";
+    socket->write(select.toUtf8());
 
     QStringList list;
     list << ui->infoLesson->text();
@@ -182,19 +204,19 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
     list << ui->infoGroup->text();
 
 
+
     int count = 0;
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
         if(ui->tableWidget->item(i, column)->text() == "+")
             count++;
 
-    list << QString::number(count);
-    list << QString::number(ui->tableWidget->rowCount()-count);
+    list << QString::number(count) << QString::number(ui->tableWidget->rowCount()-count);
 
 
-
-
-    infoLesson *info = new infoLesson(this, list);
+    info = new infoLesson(this, list);
     info->show();
+
+
 }
 
 void MainWindow::on_tableWidget_cellChanged(int row, int column)
