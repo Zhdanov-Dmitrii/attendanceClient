@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->lecture_tableWidget->sortByColumn(0,Qt::AscendingOrder);
 
-
+    ss = false;
     changeTable = true;
 }
 
@@ -113,11 +113,26 @@ void MainWindow::sockReady()
             qDebug() << foto;
             info->setFoto(audit, foto);
         }
+        else if(doc.object().value("type").toString() == "result login")
+        {
+            QString res = doc.object().value("result").toString();
+            if(res == "1")
+            {
+                QMessageBox::information(this,"Авторизация", "Вы успешно вошли");
+                auth->close();
+                ui->pushButton_4->setText("Выйти из системы");
+                ss = true;
+            }
+            else
+            {
+                QMessageBox::critical(this, "Ошибка", "Неправильный логин или пароль");
+                ss = false;
+            }
+        }
     }
     else
     {
-        QString t = data;
-        QMessageBox::information(this, "temp", t);
+        QMessageBox::information(this,"Оповещение", "Нет данных");
         qDebug() << docError.errorString();
     }
 
@@ -137,6 +152,12 @@ void MainWindow::on_search_lecture_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
+    if(!ss)
+    {
+        QMessageBox::critical(this, "Ошибка доступа", "Вы не авторизованы");
+        return;
+    }
+
     cf = new createFoto(this);
     cf->show();
 
@@ -224,6 +245,12 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
     if(!changeTable)
         return;
 
+    if(!ss)
+    {
+        QMessageBox::critical(this, "Ошибка доступа", "Вы не авторизованы");
+        return;
+    }
+
     QString fio, lessonName, lessonTime, date;
     fio = ui->tableWidget->verticalHeaderItem(row)->text();
     lessonName = ui->infoLesson->text();
@@ -270,6 +297,7 @@ void MainWindow::queryFoto(bool status)
     query += foto.readAll();
     socket->write(query);
     foto.close();
+    foto.remove();
 }
 
 void MainWindow::on_searchStudent_clicked()
@@ -293,4 +321,23 @@ void MainWindow::on_searchStudent_clicked()
             ui->tableWidget->hideRow(i);
 
     }
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    if(ss)
+    {
+        ss = false;
+        ui->pushButton_4->setText("Войти как преподаватель");
+        return;
+    }
+
+    auth = new authentication(this);
+    connect(auth, SIGNAL(enter(QString&, QString&)), this, SLOT(login(QString&, QString&)));
+    auth->show();
+}
+
+void MainWindow::login(QString& login, QString& password)
+{
+    socket->write("{\"type\":\"login\",\"login\":\""+login.toUtf8()+"\",\"password\":\""+password.toUtf8()+"\"}");
 }

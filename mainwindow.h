@@ -11,9 +11,11 @@
 #include <QJsonArray>
 #include <QProcess>
 #include <QFile>
+#include <QMessageBox>
 
 #include "infolesson.h"
 #include "createfoto.h"
+#include "authentication.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +34,7 @@ public:
 public slots:
     void sockReady();
     void sockDisc();
+    void login(QString &login, QString &password);
 
 private slots:
     void on_search_lecture_clicked();
@@ -50,14 +53,20 @@ private slots:
 
     void on_searchStudent_clicked();
 
+    void on_pushButton_4_clicked();
+
+
+
 signals:
     void listStudent(QStringList &data);
 
 private:
+    bool ss;
     bool changeTable;
     createFoto *cf;
     infoLesson *info;
     QTcpSocket *socket;
+    authentication *auth;
     QByteArray data;
     QJsonDocument doc;
     QJsonParseError docError;

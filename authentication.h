@@ -15,6 +15,12 @@ public:
     explicit authentication(QWidget *parent = nullptr);
     ~authentication();
 
+signals:
+    void enter(QString& login, QString& password);
+
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::authentication *ui;
 };

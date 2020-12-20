@@ -6,6 +6,7 @@
 #include <QCameraViewfinder>
 #include <QCameraInfo>
 #include <QCameraImageCapture>
+#include <QThread>
 
 
 namespace Ui {
